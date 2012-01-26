@@ -83,7 +83,7 @@
 (global-set-key (kbd "M-<right>") 'select-next-window)
 (global-set-key (kbd "M-<left>")  'select-previous-window)
 
-(setq default-directory "~/workspace" )
+(setq default-directory "~/work" )
 
 (add-hook 'python-mode-hook '(lambda () 
  (setq python-indent 4)
@@ -110,9 +110,41 @@
 (require 'color-theme-zenburn)
 (color-theme-zenburn)
 
+(ido-mode t)
+(ido-everywhere t)
 (setq ido-enable-flex-matching t)
-(setq ido-everywhere t)
-(ido-mode 1)
+ 
+(defun ido-find-file-in-tag-files ()
+      (interactive)
+      (save-excursion
+        (let ((enable-recursive-minibuffers t)) (visit-tags-table-buffer))
+        (find-file (expand-file-name
+                    (ido-completing-read "Project file: "
+                                         (tags-table-files) nil t)))))
+
+(ido-better-flex/enable)
+
+(global-set-key "\C-t" 'ido-find-file-in-tag-files)
 
 (setq compilation-error-regexp-alist nil)
 (setq compilation-error-regexp-alist-alist nil)
+
+(setq frame-title-format
+      (list (format "%s %%S: %%j " (system-name))
+        '(buffer-file-name "%f" (dired-directory dired-directory "%b"))))
+
+(require 'pymacs)
+(autoload 'pymacs-apply "pymacs")
+(autoload 'pymacs-call "pymacs")
+(autoload 'pymacs-eval "pymacs" nil t)
+(autoload 'pymacs-exec "pymacs" nil t)
+(autoload 'pymacs-load "pymacs" nil t)
+;;(eval-after-load "pymacs"
+;;  '(add-to-list 'pymacs-load-path YOUR-PYMACS-DIRECTORY"))
+
+(add-to-list 'load-path "~/.emacs.d/vendor/pymacs-0.24-beta2")
+(require 'pymacs)
+(pymacs-load "ropemacs" "rope-")
+(setq ropemacs-enable-autoimport t)
+
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
