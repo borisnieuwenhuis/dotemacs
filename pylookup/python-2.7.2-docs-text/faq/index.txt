@@ -1,0 +1,18 @@
+
+Python Frequently Asked Questions
+*********************************
+
+Release:
+   2.7
+
+Date:
+   January 26, 2012
+
+* General Python FAQ
+* Programming FAQ
+* Design and History FAQ
+* Library and Extension FAQ
+* Extending/Embedding FAQ
+* Python on Windows FAQ
+* Graphic User Interface FAQ
+* "Why is Python Installed on my Computer?" FAQ

@@ -1,0 +1,414 @@
+
+Mac OS Toolbox Modules
+**********************
+
+There are a set of modules that provide interfaces to various Mac OS
+toolboxes. If applicable the module will define a number of Python
+objects for the various structures declared by the toolbox, and
+operations will be implemented as methods of the object.  Other
+operations will be implemented as functions in the module.  Not all
+operations possible in C will also be possible in Python (callbacks
+are often a problem), and parameters will occasionally be different in
+Python (input and output buffers, especially).  All methods and
+functions have a ``__doc__`` string describing their arguments and
+return values, and for additional description you are referred to
+Inside Macintosh or similar works.
+
+These modules all live in a package called ``Carbon``. Despite that
+name they are not all part of the Carbon framework: CF is really in
+the CoreFoundation framework and Qt is in the QuickTime framework. The
+normal use pattern is
+
+   from Carbon import AE
+
+Note: The Carbon modules have been removed in Python 3.0.
+
+
+``Carbon.AE`` --- Apple Events
+==============================
+
+*Platforms: *Mac
+
+
+``Carbon.AH`` --- Apple Help
+============================
+
+*Platforms: *Mac
+
+
+``Carbon.App`` --- Appearance Manager
+=====================================
+
+*Platforms: *Mac
+
+
+``Carbon.Appearance`` --- Appearance Manager constants
+======================================================
+
+*Platforms: *Mac
+
+
+``Carbon.CF`` --- Core Foundation
+=================================
+
+*Platforms: *Mac
+
+The ``CFBase``, ``CFArray``, ``CFData``, ``CFDictionary``,
+``CFString`` and ``CFURL`` objects are supported, some only partially.
+
+
+``Carbon.CG`` --- Core Graphics
+===============================
+
+*Platforms: *Mac
+
+
+``Carbon.CarbonEvt`` --- Carbon Event Manager
+=============================================
+
+*Platforms: *Mac
+
+
+``Carbon.CarbonEvents`` --- Carbon Event Manager constants
+==========================================================
+
+*Platforms: *Mac
+
+
+``Carbon.Cm`` --- Component Manager
+===================================
+
+*Platforms: *Mac
+
+
+``Carbon.Components`` --- Component Manager constants
+=====================================================
+
+*Platforms: *Mac
+
+
+``Carbon.ControlAccessor`` --- Control Manager accssors
+=======================================================
+
+*Platforms: *Mac
+
+
+``Carbon.Controls`` --- Control Manager constants
+=================================================
+
+*Platforms: *Mac
+
+
+``Carbon.CoreFounation`` --- CoreFounation constants
+====================================================
+
+*Platforms: *Mac
+
+
+``Carbon.CoreGraphics`` --- CoreGraphics constants
+==================================================
+
+*Platforms: *Mac
+
+
+``Carbon.Ctl`` --- Control Manager
+==================================
+
+*Platforms: *Mac
+
+
+``Carbon.Dialogs`` --- Dialog Manager constants
+===============================================
+
+*Platforms: *Mac
+
+
+``Carbon.Dlg`` --- Dialog Manager
+=================================
+
+*Platforms: *Mac
+
+
+``Carbon.Drag`` --- Drag and Drop Manager
+=========================================
+
+*Platforms: *Mac
+
+
+``Carbon.Dragconst`` --- Drag and Drop Manager constants
+========================================================
+
+*Platforms: *Mac
+
+
+``Carbon.Events`` --- Event Manager constants
+=============================================
+
+*Platforms: *Mac
+
+
+``Carbon.Evt`` --- Event Manager
+================================
+
+*Platforms: *Mac
+
+
+``Carbon.File`` --- File Manager
+================================
+
+*Platforms: *Mac
+
+
+``Carbon.Files`` --- File Manager constants
+===========================================
+
+*Platforms: *Mac
+
+
+``Carbon.Fm`` --- Font Manager
+==============================
+
+*Platforms: *Mac
+
+
+``Carbon.Folder`` --- Folder Manager
+====================================
+
+*Platforms: *Mac
+
+
+``Carbon.Folders`` --- Folder Manager constants
+===============================================
+
+*Platforms: *Mac
+
+
+``Carbon.Fonts`` --- Font Manager constants
+===========================================
+
+*Platforms: *Mac
+
+
+``Carbon.Help`` --- Help Manager
+================================
+
+*Platforms: *Mac
+
+
+``Carbon.IBCarbon`` --- Carbon InterfaceBuilder
+===============================================
+
+*Platforms: *Mac
+
+
+``Carbon.IBCarbonRuntime`` --- Carbon InterfaceBuilder constants
+================================================================
+
+*Platforms: *Mac
+
+
+``Carbon.Icn`` --- Carbon Icon Manager
+======================================
+
+*Platforms: *Mac
+
+
+``Carbon.Icons`` --- Carbon Icon Manager constants
+==================================================
+
+*Platforms: *Mac
+
+
+``Carbon.Launch`` --- Carbon Launch Services
+============================================
+
+*Platforms: *Mac
+
+
+``Carbon.LaunchServices`` --- Carbon Launch Services constants
+==============================================================
+
+*Platforms: *Mac
+
+
+``Carbon.List`` --- List Manager
+================================
+
+*Platforms: *Mac
+
+
+``Carbon.Lists`` --- List Manager constants
+===========================================
+
+*Platforms: *Mac
+
+
+``Carbon.MacHelp`` --- Help Manager constants
+=============================================
+
+*Platforms: *Mac
+
+
+``Carbon.MediaDescr`` --- Parsers and generators for Quicktime Media descriptors
+================================================================================
+
+*Platforms: *Mac
+
+
+``Carbon.Menu`` --- Menu Manager
+================================
+
+*Platforms: *Mac
+
+
+``Carbon.Menus`` --- Menu Manager constants
+===========================================
+
+*Platforms: *Mac
+
+
+``Carbon.Mlte`` --- MultiLingual Text Editor
+============================================
+
+*Platforms: *Mac
+
+
+``Carbon.OSA`` --- Carbon OSA Interface
+=======================================
+
+*Platforms: *Mac
+
+
+``Carbon.OSAconst`` --- Carbon OSA Interface constants
+======================================================
+
+*Platforms: *Mac
+
+
+``Carbon.QDOffscreen`` --- QuickDraw Offscreen constants
+========================================================
+
+*Platforms: *Mac
+
+
+``Carbon.Qd`` --- QuickDraw
+===========================
+
+*Platforms: *Mac
+
+
+``Carbon.Qdoffs`` --- QuickDraw Offscreen
+=========================================
+
+*Platforms: *Mac
+
+
+``Carbon.Qt`` --- QuickTime
+===========================
+
+*Platforms: *Mac
+
+
+``Carbon.QuickDraw`` --- QuickDraw constants
+============================================
+
+*Platforms: *Mac
+
+
+``Carbon.QuickTime`` --- QuickTime constants
+============================================
+
+*Platforms: *Mac
+
+
+``Carbon.Res`` --- Resource Manager and Handles
+===============================================
+
+*Platforms: *Mac
+
+
+``Carbon.Resources`` --- Resource Manager and Handles constants
+===============================================================
+
+*Platforms: *Mac
+
+
+``Carbon.Scrap`` --- Scrap Manager
+==================================
+
+*Platforms: *Mac
+
+This module is only fully available on Mac OS 9 and earlier under
+classic PPC MacPython.  Very limited functionality is available under
+Carbon MacPython.
+
+The Scrap Manager supports the simplest form of cut & paste operations
+on the Macintosh.  It can be use for both inter- and intra-application
+clipboard operations.
+
+The ``Scrap`` module provides low-level access to the functions of the
+Scrap Manager.  It contains the following functions:
+
+Carbon.Scrap.InfoScrap()
+
+   Return current information about the scrap.  The information is
+   encoded as a tuple containing the fields ``(size, handle, count,
+   state, path)``.
+
+   +------------+-----------------------------------------------+
+   | Field      | Meaning                                       |
+   +============+===============================================+
+   | *size*     | Size of the scrap in bytes.                   |
+   +------------+-----------------------------------------------+
+   | *handle*   | Resource object representing the scrap.       |
+   +------------+-----------------------------------------------+
+   | *count*    | Serial number of the scrap contents.          |
+   +------------+-----------------------------------------------+
+   | *state*    | Integer; positive if in memory, ``0`` if on   |
+   |            | disk, negative if uninitialized.              |
+   +------------+-----------------------------------------------+
+   | *path*     | Filename of the scrap when stored on disk.    |
+   +------------+-----------------------------------------------+
+
+See also:
+
+   Scrap Manager
+      Apple's documentation for the Scrap Manager gives a lot of
+      useful information about using the Scrap Manager in
+      applications.
+
+
+``Carbon.Snd`` --- Sound Manager
+================================
+
+*Platforms: *Mac
+
+
+``Carbon.Sound`` --- Sound Manager constants
+============================================
+
+*Platforms: *Mac
+
+
+``Carbon.TE`` --- TextEdit
+==========================
+
+*Platforms: *Mac
+
+
+``Carbon.TextEdit`` --- TextEdit constants
+==========================================
+
+*Platforms: *Mac
+
+
+``Carbon.Win`` --- Window Manager
+=================================
+
+*Platforms: *Mac
+
+
+``Carbon.Windows`` --- Window Manager constants
+===============================================
+
+*Platforms: *Mac

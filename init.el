@@ -47,7 +47,7 @@
 (cua-mode t)
 
 
-(setq show-paren-mode t) 
+(setq show-paren-mode t)
 (setq show-paren-style 'parenthesis)
 (setq blink-matching-paren t)
 
@@ -71,12 +71,12 @@
 (setq-default indent-tabs-mode nil)
 
 (defun select-next-window ()
-  "Switch to the next window" 
+  "Switch to the next window"
   (interactive)
   (select-window (next-window)))
 
 (defun select-previous-window ()
-  "Switch to the previous window" 
+  "Switch to the previous window"
   (interactive)
   (select-window (previous-window)))
 
@@ -85,12 +85,12 @@
 
 (setq default-directory "~/work" )
 
-(add-hook 'python-mode-hook '(lambda () 
+(add-hook 'python-mode-hook '(lambda ()
  (setq python-indent 4)
  (setq indent-tabs-mode nil)))
 
-(require 'uniquify) 
-(setq 
+(require 'uniquify)
+(setq
   uniquify-buffer-name-style 'post-forward
   uniquify-separator ":")
 
@@ -113,7 +113,7 @@
 (ido-mode t)
 (ido-everywhere t)
 (setq ido-enable-flex-matching t)
- 
+
 (defun ido-find-file-in-tag-files ()
       (interactive)
       (save-excursion
@@ -133,6 +133,12 @@
       (list (format "%s %%S: %%j " (system-name))
         '(buffer-file-name "%f" (dired-directory dired-directory "%b"))))
 
+(add-to-list 'load-path "~/.emacs.d/vendor/python-mode.el-6.0.4")
+(setq py-install-directory "~/.emacs.d/vendor/python-mode.el-6.0.4")
+(require 'python-mode)
+
+(add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
+
 (require 'pymacs)
 (autoload 'pymacs-apply "pymacs")
 (autoload 'pymacs-call "pymacs")
@@ -147,4 +153,51 @@
 (pymacs-load "ropemacs" "rope-")
 (setq ropemacs-enable-autoimport t)
 
+(setq ipython-command "/usr/local/bin/ipython")
+(require 'ipython)
+
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+(require 'lambda-mode)
+(add-hook 'python-mode-hook #'lambda-mode 1)
+
+(setq lambda-symbol (string (make-char 'greek-iso8859-7 107)))
+
+(require 'anything)
+(require 'anything-ipython)
+(when (require 'anything-show-completion nil t)
+   (use-anything-show-completion 'anything-ipython-complete
+                                 '(length initial-pattern)))
+
+(setq pylookup-dir "~/.emacs.d/pylookup")
+(add-to-list 'load-path pylookup-dir)
+
+;; load pylookup when compile time
+(eval-when-compile (require 'pylookup))
+
+;; set executable file and db file
+(setq pylookup-program (concat pylookup-dir "/pylookup.py"))
+(setq pylookup-db-file (concat pylookup-dir "/pylookup.db"))
+
+;; set search option if you want
+;; (setq pylookup-search-options '("--insensitive" "0" "--desc" "0"))
+
+;; to speedup, just load it on demand
+(autoload 'pylookup-lookup "pylookup"
+  "Lookup SEARCH-TERM in the Python HTML indexes." t)
+
+(autoload 'pylookup-update "pylookup"
+  "Run pylookup-update and create the database at `pylookup-db-file'." t)
+
+(require 'python-pep8)
+(require 'python-pylint)
+
+;;; A quick & ugly PATH solution to Emacs on Mac OSX
+(if (string-equal "darwin" (symbol-name system-type))
+   (setenv "PATH" (concat "/opt/local/bin:/opt/local/sbin:" (getenv "PATH"))))
+
+(defun create-tags (dir-name)
+     "Create tags file."
+     (interactive "DDirectory: ")
+     (eshell-command
+      (format "find %s -type f -name \"*.[ch]\" | etags -L -" dir-name)))
