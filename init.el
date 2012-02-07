@@ -22,6 +22,9 @@
 (setq inhibit-splash-screen t)
 (setq inhibit-startup-message t)
 
+(setq-default tab-width 4)
+
+
 (setq make-backup-files nil) ;no backup files
 (setq auto-save-list-filen-name nil) ;no .save files
 (setq auto-save-default nil) ;no auto saving
@@ -35,6 +38,19 @@
 ; video) as opposed to "beep"
 (setq visible-bell t)
 
+(add-to-list 'load-path "~/.emacs.d/vendor/textmate.el")
+(require 'textmate)
+(textmate-mode)
+
+(add-to-list 'load-path "~/.emacs.d/vendor/coffee-mode")
+(require 'coffee-mode)
+
+(defun coffee-custom ()
+  "coffee-mode-hook"
+ (set (make-local-variable 'tab-width) 2))
+
+(add-hook 'coffee-mode-hook
+  '(lambda() (coffee-custom)))
 
 (line-number-mode 1) ;display line number in the mode line
 (column-number-mode 1) ;display column number in the mode line
@@ -46,10 +62,6 @@
 ;make ctrl-c/v/x work
 (cua-mode t)
 
-
-(setq show-paren-mode t)
-(setq show-paren-style 'parenthesis)
-(setq blink-matching-paren t)
 
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
@@ -70,6 +82,15 @@
 ; Use only spaces for auto-indentation
 (setq-default indent-tabs-mode nil)
 
+;save buffer history
+(desktop-save-mode 1)
+
+;save mini buffer history
+(savehist-mode 1)
+
+;show line numbers
+(global-linum-mode 1)
+
 (defun select-next-window ()
   "Switch to the next window"
   (interactive)
@@ -83,7 +104,11 @@
 (global-set-key (kbd "M-<right>") 'select-next-window)
 (global-set-key (kbd "M-<left>")  'select-previous-window)
 
-(setq default-directory "~/work" )
+
+(setq default-directory "~/work/bliep/bliep" )
+
+;; load tags file
+(visit-tags-table "~/work/bliep/bliep/TAGS")
 
 (add-hook 'python-mode-hook '(lambda ()
  (setq python-indent 4)
@@ -129,32 +154,12 @@
 (setq compilation-error-regexp-alist nil)
 (setq compilation-error-regexp-alist-alist nil)
 
+(require 'python)
+
 (setq frame-title-format
       (list (format "%s %%S: %%j " (system-name))
         '(buffer-file-name "%f" (dired-directory dired-directory "%b"))))
 
-(add-to-list 'load-path "~/.emacs.d/vendor/python-mode.el-6.0.4")
-(setq py-install-directory "~/.emacs.d/vendor/python-mode.el-6.0.4")
-(require 'python-mode)
-
-(add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
-
-(require 'pymacs)
-(autoload 'pymacs-apply "pymacs")
-(autoload 'pymacs-call "pymacs")
-(autoload 'pymacs-eval "pymacs" nil t)
-(autoload 'pymacs-exec "pymacs" nil t)
-(autoload 'pymacs-load "pymacs" nil t)
-;;(eval-after-load "pymacs"
-;;  '(add-to-list 'pymacs-load-path YOUR-PYMACS-DIRECTORY"))
-
-(add-to-list 'load-path "~/.emacs.d/vendor/pymacs-0.24-beta2")
-(require 'pymacs)
-(pymacs-load "ropemacs" "rope-")
-(setq ropemacs-enable-autoimport t)
-
-(setq ipython-command "/usr/local/bin/ipython")
-(require 'ipython)
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
@@ -162,12 +167,6 @@
 (add-hook 'python-mode-hook #'lambda-mode 1)
 
 (setq lambda-symbol (string (make-char 'greek-iso8859-7 107)))
-
-(require 'anything)
-(require 'anything-ipython)
-(when (require 'anything-show-completion nil t)
-   (use-anything-show-completion 'anything-ipython-complete
-                                 '(length initial-pattern)))
 
 (setq pylookup-dir "~/.emacs.d/pylookup")
 (add-to-list 'load-path pylookup-dir)
@@ -182,6 +181,7 @@
 ;; set search option if you want
 ;; (setq pylookup-search-options '("--insensitive" "0" "--desc" "0"))
 
+
 ;; to speedup, just load it on demand
 (autoload 'pylookup-lookup "pylookup"
   "Lookup SEARCH-TERM in the Python HTML indexes." t)
@@ -189,15 +189,43 @@
 (autoload 'pylookup-update "pylookup"
   "Run pylookup-update and create the database at `pylookup-db-file'." t)
 
-(require 'python-pep8)
-(require 'python-pylint)
-
-;;; A quick & ugly PATH solution to Emacs on Mac OSX
-(if (string-equal "darwin" (symbol-name system-type))
-   (setenv "PATH" (concat "/opt/local/bin:/opt/local/sbin:" (getenv "PATH"))))
-
 (defun create-tags (dir-name)
      "Create tags file."
      (interactive "DDirectory: ")
      (eshell-command
       (format "find %s -type f -name \"*.[ch]\" | etags -L -" dir-name)))
+
+(defmacro cmd (name &rest body)
+  "declare an interactive command without all the boilerplate"
+  `(defun ,name ()
+     (interactive)
+     ,@body))
+
+(defmacro bind (key fn)
+"shortcut for global-set-key"
+        `(global-set-key (kbd ,key)
+        ;; handle unquoted function names and lambdas
+        ,(if (listp fn)
+         fn
+       `',fn)))
+
+(cmd isearch-other-window
+     (save-selected-window
+       (other-window 1)
+       (isearch-forward)))
+
+(bind "C-M-S" isearch-other-window)
+
+(defun quick-copy-line ()
+      "Copy the whole line that point is on and move to the beginning of the next line.
+    Consecutive calls to this command append each line to the
+    kill-ring."
+      (interactive)
+      (let ((beg (line-beginning-position 1))
+            (end (line-beginning-position 2)))
+        (if (eq last-command 'quick-copy-line)
+            (kill-append (buffer-substring beg end) (< end beg))
+          (kill-new (buffer-substring beg end))))
+      (beginning-of-line 2))
+
+
