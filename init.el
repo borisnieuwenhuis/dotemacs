@@ -22,7 +22,26 @@
 (setq inhibit-splash-screen t)
 (setq inhibit-startup-message t)
 
-(setq-default tab-width 4)
+
+; auto load all buffers on changes
+(global-auto-revert-mode t) 
+
+; Use only spaces for auto-indentation
+(setq-default indent-tabs-mode nil)
+(setq tab-width 4)
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+(require 'whitespace)
+
+;; untabify some modes
+(setq alexott/untabify-modes '(haskell-mode emacs-lisp-mode lisp-mode scheme-mode
+                                            erlang-mode clojure-mode python-mode javascript-mode php-mode))
+(defun alexott/untabify-hook ()
+  (when (member major-mode alexott/untabify-modes)
+    (untabify (point-min) (point-max))))
+
+(add-hook 'before-save-hook 'alexott/untabify-hook)
+
 
 
 (setq make-backup-files nil) ;no backup files
@@ -79,8 +98,6 @@
 (ac-config-default)
 (setq ac-delay 0.1)
 
-; Use only spaces for auto-indentation
-(setq-default indent-tabs-mode nil)
 
 ;save buffer history
 (desktop-save-mode 1)
@@ -110,24 +127,11 @@
 ;; load tags file
 (visit-tags-table "~/work/bliep/bliep/TAGS")
 
-(add-hook 'python-mode-hook '(lambda ()
- (setq python-indent 4)
- (setq indent-tabs-mode nil)))
 
 (require 'uniquify)
 (setq
   uniquify-buffer-name-style 'post-forward
   uniquify-separator ":")
-
-;; untabify some modes
-(setq alexott/untabify-modes '(haskell-mode emacs-lisp-mode lisp-mode scheme-mode
-                                            erlang-mode clojure-mode python-mode javascript-mode php-mode))
-(defun alexott/untabify-hook ()
-  (when (member major-mode alexott/untabify-modes)
-    (untabify (point-min) (point-max))))
-
-(add-hook 'before-save-hook 'alexott/untabify-hook)
-
 
 ;rainbow-delimiters
 (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
@@ -160,8 +164,6 @@
       (list (format "%s %%S: %%j " (system-name))
         '(buffer-file-name "%f" (dired-directory dired-directory "%b"))))
 
-
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 (require 'lambda-mode)
 (add-hook 'python-mode-hook #'lambda-mode 1)
